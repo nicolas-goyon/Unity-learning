@@ -14,15 +14,37 @@ public class Player : MonoBehaviour
     private Vector3 lastInteractionDir;
 
     // Start is called before the first frame update
-    void Start() {
-        
+    private void Start() {
+        gameInput.OnInteractAction += GameInput_OnInteractAction;
     }
+
+    private void GameInput_OnInteractAction(object sender, System.EventArgs e) {
+        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+
+        Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
+
+        if (moveDir != Vector3.zero) {
+            lastInteractionDir = moveDir;
+        }
+        float interactDistance = 2f;
+
+        if (Physics.Raycast(transform.position, lastInteractionDir, out RaycastHit raycastHit, interactDistance, countersLayerMask)) {
+            if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter)) {
+                clearCounter.Interract();
+            }
+        }
+        else {
+            Debug.Log("-");
+        }
+
+    }
+
 
     // Update is called once per frame
     private void Update()
     {
         handleMovement();
-        handleInteractions();
+        //handleInteractions();
     }
 
     private void handleInteractions() {
@@ -39,10 +61,10 @@ public class Player : MonoBehaviour
             if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter)) {
                 clearCounter.Interract();
             }
-        }else {
+        }
+        else {
             Debug.Log("-");
         }
-
     }
 
     private void handleMovement() {
