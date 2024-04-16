@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ClearCounter : MonoBehaviour
 {
-    public void Interract() {
+    public void Interact() {
         Debug.Log("Clearing counter");
     }   
 }
