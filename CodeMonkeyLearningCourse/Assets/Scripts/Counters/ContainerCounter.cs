@@ -6,7 +6,7 @@ using UnityEngine;
 public class ContainerCounter : BaseCounter {
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
 
-    public EventHandler OnPlayerGrabObject;
+    public event EventHandler OnPlayerGrabObject;
 
     // Start is called before the first frame update
     void Start()
@@ -26,8 +26,7 @@ public class ContainerCounter : BaseCounter {
             return;
         }
 
-
-        Instantiate(kitchenObjectSO.prefab, counterTopPoint).GetComponent<KitchenObject>().SetKitchenObjectParent(player);
+        KitchenObject.SpawnKitchenObject(kitchenObjectSO, player);
         OnPlayerGrabObject?.Invoke(this, EventArgs.Empty);
     }
 

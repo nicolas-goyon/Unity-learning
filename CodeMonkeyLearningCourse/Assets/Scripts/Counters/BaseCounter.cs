@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine;
 public abstract class BaseCounter : MonoBehaviour, IKitchenObjectParent{
     [SerializeField] protected Transform counterTopPoint;
     protected KitchenObject kitchenObject;
+
 
     public void ClearKitchenObject() {
         kitchenObject = null;
@@ -26,4 +28,6 @@ public abstract class BaseCounter : MonoBehaviour, IKitchenObjectParent{
         this.kitchenObject = kitchenObject;
     }
     public abstract void Interact(Player player);
+
+    public virtual void InteractAlternate(Player player) {}
 }
