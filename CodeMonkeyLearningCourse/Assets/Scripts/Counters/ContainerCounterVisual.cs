@@ -5,7 +5,7 @@ using UnityEngine;
 public class ContainerCounterVisual : MonoBehaviour
 {
     private Animator animator;
-    [SerializeField] private readonly string OPEN_CLOSE;
+    [SerializeField] private string OPEN_CLOSE;
     [SerializeField] private ContainerCounter containerCounter;
 
     public void Awake() {

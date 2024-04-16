@@ -394,5 +394,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0dde20c55d14e44fbbbb394295e4a99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationName: OpenClose
+  OPEN_CLOSE: OpenClose
   containerCounter: {fileID: 5065551133984995941}

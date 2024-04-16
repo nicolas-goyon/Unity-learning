@@ -22,6 +22,11 @@ public class ContainerCounter : BaseCounter {
 
 
     public override void Interact(Player player) {
+        if (player.HasKitchenObject()) {
+            return;
+        }
+
+
         Instantiate(kitchenObjectSO.prefab, counterTopPoint).GetComponent<KitchenObject>().SetKitchenObjectParent(player);
         OnPlayerGrabObject?.Invoke(this, EventArgs.Empty);
     }
