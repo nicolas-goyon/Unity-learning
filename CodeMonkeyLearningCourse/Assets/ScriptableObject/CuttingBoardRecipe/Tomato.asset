@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c30d537db85649546b50f351f1c5b53d, type: 3}
+  m_Name: Tomato
+  m_EditorClassIdentifier: 
+  initialKitchenObjectSO: {fileID: 11400000, guid: 7048522273b73d046992ad829840d025,
+    type: 2}
+  resultKitchenObjectSO: {fileID: 11400000, guid: d537f64f3fbe27348ad156560b946df4,
+    type: 2}
+  cuttingCounterMax: 3

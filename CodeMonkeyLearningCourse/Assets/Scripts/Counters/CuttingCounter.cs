@@ -1,16 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CuttingCounter : BaseCounter {
 
-    [System.Serializable]
-    public class CuttingObjectTarget {
-        public KitchenObjectSO kitchenObjectSO;
-        public KitchenObjectSO resultKitchenObjectSO;
+
+    [SerializeField] private CuttingBoardRecipe[] cuttingObjectTargets;
+    private int cuttingCounter = 0;
+
+    public event EventHandler<OnCuttingCounterChangeEventArgs> OnCuttingCounterChange;
+
+    public class OnCuttingCounterChangeEventArgs : EventArgs {
+        public float progressNormalized;
     }
 
-    [SerializeField] private List<CuttingObjectTarget> cuttingObjectTargets;
+    public event EventHandler OnPlayerCut;
 
 
     public override void Interact(Player player) {
@@ -24,9 +29,15 @@ public class CuttingCounter : BaseCounter {
 
         if (HasKitchenObject()) {
             kitchenObject.SetKitchenObjectParent(player);
+
+            cuttingCounter = 0;
+
+            OnCuttingCounterChange?.Invoke(this, new OnCuttingCounterChangeEventArgs { progressNormalized = 0 });
+
+
         }
         else if (IsCuttingObjectSO(player.GetKitchenObject().GetKitchenObjectSO())) {
-            player.GetKitchenObject().SetKitchenObjectParent(this);            
+            player.GetKitchenObject().SetKitchenObjectParent(this);
         }
 
 
@@ -37,22 +48,31 @@ public class CuttingCounter : BaseCounter {
             return;
         }
         KitchenObjectSO initial = kitchenObject.GetKitchenObjectSO();
-        KitchenObjectSO result = GetResultKitchenObjectSO(initial);
+        CuttingBoardRecipe result = GetRecipeSO(initial);
 
         if (result == null) {
             return;
         }
 
+        cuttingCounter++;
+        PlayerCut((float)cuttingCounter / result.cuttingCounterMax);
 
-        GetKitchenObject().DestroySelf();
-
-        KitchenObject.SpawnKitchenObject(result, this);
+        if (cuttingCounter >= result.cuttingCounterMax) {
+            kitchenObject.DestroySelf();
+            KitchenObject.SpawnKitchenObject(result.resultKitchenObjectSO, this);
+            cuttingCounter = 0;
+        }
 
     }
 
+    private void PlayerCut(float progress) {
+        OnCuttingCounterChange?.Invoke(this, new OnCuttingCounterChangeEventArgs { progressNormalized = progress });
+        OnPlayerCut?.Invoke(this, EventArgs.Empty);
+    }
+
     private bool IsCuttingObjectSO(KitchenObjectSO kitchenObjectSO) {
-        foreach (CuttingObjectTarget target in cuttingObjectTargets) {
-            if (target.kitchenObjectSO == kitchenObjectSO) {
+        foreach (CuttingBoardRecipe target in cuttingObjectTargets) {
+            if (target.initialKitchenObjectSO == kitchenObjectSO) {
                 return true;
             }
         }
@@ -60,10 +80,10 @@ public class CuttingCounter : BaseCounter {
         return false;
     }
 
-    private KitchenObjectSO GetResultKitchenObjectSO(KitchenObjectSO initial) {
-        foreach (CuttingObjectTarget target in cuttingObjectTargets) {
-            if (target.kitchenObjectSO == initial) {
-                return target.resultKitchenObjectSO;
+    private CuttingBoardRecipe GetRecipeSO(KitchenObjectSO initial) {
+        foreach (CuttingBoardRecipe target in cuttingObjectTargets) {
+            if (target.initialKitchenObjectSO == initial) {
+                return target;
             }
         }
 
