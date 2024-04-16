@@ -25,9 +25,8 @@ public class CuttingCounter : BaseCounter {
         if (HasKitchenObject()) {
             kitchenObject.SetKitchenObjectParent(player);
         }
-        else {
-            // player has kitchen object
-            player.GetKitchenObject().SetKitchenObjectParent(this);
+        else if (IsCuttingObjectSO(player.GetKitchenObject().GetKitchenObjectSO())) {
+            player.GetKitchenObject().SetKitchenObjectParent(this);            
         }
 
 
@@ -37,13 +36,13 @@ public class CuttingCounter : BaseCounter {
         if (!HasKitchenObject()) {
             return;
         }
+        KitchenObjectSO initial = kitchenObject.GetKitchenObjectSO();
+        KitchenObjectSO result = GetResultKitchenObjectSO(initial);
 
-        if (!IsCuttingObjectSO(kitchenObject.GetKitchenObjectSO())) {
+        if (result == null) {
             return;
         }
 
-        KitchenObjectSO initial = kitchenObject.GetKitchenObjectSO();
-        KitchenObjectSO result = GetResultKitchenObjectSO(initial);
 
         GetKitchenObject().DestroySelf();
 
