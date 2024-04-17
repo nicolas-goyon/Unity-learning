@@ -106,13 +106,28 @@ public class StoveCounter : BaseCounter, IHasProgress {
     }
 
     public override void Interact(Player player) {
-        if (player.HasKitchenObject() && HasKitchenObject()) { return; } // Both have items
-        if (!player.HasKitchenObject() && !HasKitchenObject()) { return; } // No items
+        if (HasKitchenObject() && player.HasKitchenObject()) {// if both player and counter have objects
+            if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plate) ) {
+                bool isAdded = plate.TryAddIngredient(kitchenObject.GetKitchenObjectSO());
+                if (isAdded) { 
+                    GetKitchenObject().DestroySelf();
+                    ChangeState(StoveState.Idle);
+                    OnProgressChange?.Invoke(this, new IHasProgress.OnProgressChangeEventArgs { progressNormalized = 0 });
+                }
+            }
+
+            return;
+        }
+
+        if (!HasKitchenObject() && !player.HasKitchenObject()) { // if both player and counter don't have objects
+            return;
+        }
 
         if (!player.HasKitchenObject()) {
             // Picking up
             kitchenObject.SetKitchenObjectParent(player);
             ChangeState(StoveState.Idle);
+            OnProgressChange?.Invoke(this, new IHasProgress.OnProgressChangeEventArgs { progressNormalized = 0 });
         } 
         else if (player.HasKitchenObject()) {
             // Putting down 
