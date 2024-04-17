@@ -16,14 +16,13 @@ public class DeliveryManager : MonoBehaviour
     }
 
 
-    public event EventHandler<RecipeRequestCreationEventArgs> RecipeRequestCreation;
+    public event EventHandler<OnWaitingRecipeChangeEventArgs> OnWaitingRecipeChange;
 
-    public class RecipeRequestCreationEventArgs : EventArgs {
-        public RecipeSO newRecipe;
+    public class OnWaitingRecipeChangeEventArgs : EventArgs {
     }
 
 
-    private readonly List<RecipeSO> waitingRecipeList = new List<RecipeSO>();
+    private readonly List<RecipeSO> waitingRecipeList = new ();
     [SerializeField] private RecipeHolder recipeHolder;
     [SerializeField] private float deliveryTimeMax = 5f;
     [SerializeField] private int maxWaitingRecipe = 5;
@@ -47,20 +46,18 @@ public class DeliveryManager : MonoBehaviour
 
     private void CreateRecipeRequest() {
         RecipeSO recipe = recipeHolder.recipeList[UnityEngine.Random.Range(0, recipeHolder.recipeList.Length)];
-        Debug.Log("Create Recipe Request: " + recipe.recipeName);
         waitingRecipeList.Add(recipe);
-        RecipeRequestCreation?.Invoke(this, new RecipeRequestCreationEventArgs { newRecipe = recipe });
+        OnWaitingRecipeChange?.Invoke(this, new());
     }
 
     public void DeliverRecipe(PlateKitchenObject plate) {
         for (int i = 0; i < waitingRecipeList.Count; i++) {
             if (CheckRecipe(plate, waitingRecipeList[i])) {
-                Debug.Log("Recipe Delivered: " + waitingRecipeList[i].recipeName);
                 waitingRecipeList.RemoveAt(i);
+                OnWaitingRecipeChange?.Invoke(this, new());
                 return;
             }
         }
-        Debug.Log("Recipe not found");
     }
 
     public bool CheckRecipe(PlateKitchenObject plate, RecipeSO recipe) {
@@ -79,5 +76,10 @@ public class DeliveryManager : MonoBehaviour
         }
 
         return true;
+    }
+
+
+    public List<RecipeSO> GetWaitingRecipes() {
+        return waitingRecipeList;
     }
 }
