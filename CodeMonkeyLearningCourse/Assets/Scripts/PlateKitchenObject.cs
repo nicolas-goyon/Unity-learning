@@ -16,16 +16,13 @@ public class PlateKitchenObject : KitchenObject
 
     public bool TryAddIngredient(KitchenObjectSO ingredient) {
         if (ingredients.Contains(ingredient)) {
-            Debug.Log("Ingredient already added");
             return false;
         }
 
         if (!validIngredients.Contains(ingredient)) {
-            Debug.Log("Invalid ingredient");
             return false;
         }
         
-        Debug.Log("Ingredient added");
         ingredients.Add(ingredient);
         OnIngredientAdded?.Invoke(this, new OnIngredientAddedEventArgs { ingredient = ingredient });
 
