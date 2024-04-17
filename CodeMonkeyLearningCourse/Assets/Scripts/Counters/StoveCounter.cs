@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class StoveCounter : BaseCounter, IHasProgress {
+
+    
+
+
     public enum StoveState {
         Idle,
         Frying,

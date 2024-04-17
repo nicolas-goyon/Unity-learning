@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ContainerCounter : BaseCounter {
+
+
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
 
     public event EventHandler OnPlayerGrabObject;
@@ -11,7 +13,6 @@ public class ContainerCounter : BaseCounter {
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame

@@ -9,7 +9,8 @@ public class DeliveryManagerUI : MonoBehaviour
 
     private void Start() {
         recipeTemplate.gameObject.SetActive(false);
-        DeliveryManager.Instance.OnWaitingRecipeChange += DeliveryManager_OnWaitingRecipeChange;
+        DeliveryManager.Instance.OnDeliverySuccess += DeliveryManager_OnWaitingRecipeChange;
+        DeliveryManager.Instance.OnNewDeliveryRequest += DeliveryManager_OnWaitingRecipeChange;
     }
 
     private void DeliveryManager_OnWaitingRecipeChange(object sender, System.EventArgs e) {

@@ -4,15 +4,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using static IHasProgress;
 
-public class CuttingCounter : BaseCounter, IHasProgress { 
+public class CuttingCounter : BaseCounter, IHasProgress {
+
+    public static event EventHandler OnAnyCut;
+
 
     [SerializeField] private CuttingBoardRecipe[] cuttingObjectTargets;
+
     private int cuttingCounter = 0;
 
     public event EventHandler<OnProgressChangeEventArgs> OnProgressChange;
 
 
     public event EventHandler OnPlayerCut;
+
+    public void Start() {
+        OnPlayerCut += (sender, e) => {
+            OnAnyCut?.Invoke(this, new());
+        };
+    }
 
 
     public override void Interact(Player player) {

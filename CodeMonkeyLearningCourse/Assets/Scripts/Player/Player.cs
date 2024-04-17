@@ -13,6 +13,9 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
         public BaseCounter selectedCounter;
     }
 
+    public event EventHandler OnPlayerGrabObject;
+    //public event EventHandler OnPlayerDropObject;
+
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private GameInput gameInput;
     [SerializeField] private LayerMask countersLayerMask;
@@ -122,8 +125,8 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
         isWalking = moveDir != Vector3.zero;
 
         float rotateSpeed = 10f;
-
-        transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+        if (moveDir != Vector3.zero)
+            transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
     }
 
 
@@ -139,10 +142,17 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
 
     public void ClearKitchenObject() {
         kitchenObject = null;
+        //OnPlayerDropObject?.Invoke(this, EventArgs.Empty);
     }
 
     public void SetKitchenObject(KitchenObject kitchenObject) {
         this.kitchenObject = kitchenObject;
+        if (kitchenObject != null) {
+            OnPlayerGrabObject?.Invoke(this, EventArgs.Empty);
+        }
+        //else {
+        //    OnPlayerDropObject?.Invoke(this, EventArgs.Empty);
+        //}
     }
 
     public KitchenObject GetKitchenObject() {

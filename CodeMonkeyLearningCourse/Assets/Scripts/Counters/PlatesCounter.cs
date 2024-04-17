@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlatesCounter : BaseCounter {
 
+
     [SerializeField] private float plateSpawnTime = 5f;
     [SerializeField] private KitchenObjectSO plateKitchenObjectSO;
     public int MaxPlateCount { get; private set; } = 5;
@@ -14,6 +15,7 @@ public class PlatesCounter : BaseCounter {
     public class PlateCountChangedEventArgs : EventArgs {
         public int plateCount;
     }
+
 
 
     private int plateCount = 0;

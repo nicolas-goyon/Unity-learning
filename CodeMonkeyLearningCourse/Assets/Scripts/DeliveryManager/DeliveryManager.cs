@@ -16,10 +16,10 @@ public class DeliveryManager : MonoBehaviour
     }
 
 
-    public event EventHandler<OnWaitingRecipeChangeEventArgs> OnWaitingRecipeChange;
+    public event EventHandler OnDeliverySuccess;
+    public event EventHandler OnDeliveryFail;
+    public event EventHandler OnNewDeliveryRequest;
 
-    public class OnWaitingRecipeChangeEventArgs : EventArgs {
-    }
 
 
     private readonly List<RecipeSO> waitingRecipeList = new ();
@@ -47,17 +47,18 @@ public class DeliveryManager : MonoBehaviour
     private void CreateRecipeRequest() {
         RecipeSO recipe = recipeHolder.recipeList[UnityEngine.Random.Range(0, recipeHolder.recipeList.Length)];
         waitingRecipeList.Add(recipe);
-        OnWaitingRecipeChange?.Invoke(this, new());
+        OnNewDeliveryRequest?.Invoke(this, new());
     }
 
     public void DeliverRecipe(PlateKitchenObject plate) {
         for (int i = 0; i < waitingRecipeList.Count; i++) {
             if (CheckRecipe(plate, waitingRecipeList[i])) {
                 waitingRecipeList.RemoveAt(i);
-                OnWaitingRecipeChange?.Invoke(this, new());
+                OnDeliverySuccess?.Invoke(this, new());
                 return;
             }
         }
+        OnDeliveryFail?.Invoke(this, new());
     }
 
     public bool CheckRecipe(PlateKitchenObject plate, RecipeSO recipe) {
