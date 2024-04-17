@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float countDownToStartCountDown = 3f;
     private float countDownToStartTimer;
 
-    [SerializeField] private float timeToPlay = 10f;
+    [SerializeField] private float timeToPlay = 60f;
     private float timeToPlayTimer;
 
 
@@ -119,5 +119,13 @@ public class GameManager : MonoBehaviour
 
     public float GetCountDownToStartTimer() {
         return countDownToStartTimer;
+    }
+
+    public float GetTimeToPlayTimer() {
+        return timeToPlayTimer;
+    }
+
+    public float GetTimeToPlay() {
+        return timeToPlay;
     }
 }
