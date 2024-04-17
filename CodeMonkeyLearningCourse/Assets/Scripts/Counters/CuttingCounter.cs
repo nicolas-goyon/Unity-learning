@@ -2,18 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static IHasProgress;
 
-public class CuttingCounter : BaseCounter {
-
+public class CuttingCounter : BaseCounter, IHasProgress { 
 
     [SerializeField] private CuttingBoardRecipe[] cuttingObjectTargets;
     private int cuttingCounter = 0;
 
-    public event EventHandler<OnCuttingCounterChangeEventArgs> OnCuttingCounterChange;
+    public event EventHandler<OnProgressChangeEventArgs> OnProgressChange;
 
-    public class OnCuttingCounterChangeEventArgs : EventArgs {
-        public float progressNormalized;
-    }
 
     public event EventHandler OnPlayerCut;
 
@@ -32,7 +29,7 @@ public class CuttingCounter : BaseCounter {
 
             cuttingCounter = 0;
 
-            OnCuttingCounterChange?.Invoke(this, new OnCuttingCounterChangeEventArgs { progressNormalized = 0 });
+            OnProgressChange?.Invoke(this, new OnProgressChangeEventArgs { progressNormalized = 0 });
 
 
         }
@@ -66,7 +63,7 @@ public class CuttingCounter : BaseCounter {
     }
 
     private void PlayerCut(float progress) {
-        OnCuttingCounterChange?.Invoke(this, new OnCuttingCounterChangeEventArgs { progressNormalized = progress });
+        OnProgressChange?.Invoke(this, new OnProgressChangeEventArgs { progressNormalized = progress });
         OnPlayerCut?.Invoke(this, EventArgs.Empty);
     }
 
